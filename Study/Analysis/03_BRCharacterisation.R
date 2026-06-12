@@ -54,7 +54,7 @@ cdm$characteristics_br <- cdm$characteristics_br |>
   mutate(trimester = !!datediff("pregnancy_start_date", "cohort_start_date")) |>
   mutate(
     trimester = case_when(
-      cohort_name %in% c("postpartum_endometritis", "postpartum_haemorrhage") ~ "Postpartum"
+      cohort_name %in% c("postpartum_endometritis", "postpartum_haemorrhage") ~ "Postpartum",
       cohort_start_date > pregnancy_end_date ~ "Postpartum",
       trimester >= 0 & trimester <= 90 ~ "Trimester 1",
       trimester >= 91 & trimester <= 180 ~ "Trimester 2",
