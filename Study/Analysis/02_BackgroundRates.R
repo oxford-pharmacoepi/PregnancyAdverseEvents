@@ -24,7 +24,8 @@ cif_aesi_30 <- estimateSingleEventSurvival(
   outcomeCohortTable = "aesi_30",
   outcomeWashout = 30,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 cif_aesi_90 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -32,7 +33,8 @@ cif_aesi_90 <- estimateSingleEventSurvival(
   outcomeCohortTable = "aesi_90",
   outcomeWashout = 90,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 cif_aesi_180 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -40,7 +42,8 @@ cif_aesi_180 <- estimateSingleEventSurvival(
   outcomeCohortTable = "aesi_180",
   outcomeWashout = 180,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 cif_aesi_inf <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -48,7 +51,8 @@ cif_aesi_inf <- estimateSingleEventSurvival(
   outcomeCohortTable = "aesi_inf",
   outcomeWashout = Inf,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 ### MAE pregnancy
 maePregnancy <- c(
@@ -64,7 +68,8 @@ cif_mae_pregnancy <- estimateSingleEventSurvival(
   outcomeCohortId = maePregnancy,
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 cif_mae_postpartum_12 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -73,7 +78,8 @@ cif_mae_postpartum_12 <- estimateSingleEventSurvival(
   outcomeCohortId = "postpartum_haemorrhage",
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 cif_mae_postpartum_12_sens <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -82,7 +88,8 @@ cif_mae_postpartum_12_sens <- estimateSingleEventSurvival(
   outcomeCohortId = "postpartum_haemorrhage",
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 cif_mae_postpartum_6 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -91,7 +98,8 @@ cif_mae_postpartum_6 <- estimateSingleEventSurvival(
   outcomeCohortId = "postpartum_endometritis",
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 cif_mae_maternal_death <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -100,27 +108,15 @@ cif_mae_maternal_death <- estimateSingleEventSurvival(
   outcomeCohortId = "maternal_death",
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
-  strata = strata
-)
-
-cdm$cif_overall_denominator <- cdm$pregnancy_denominator |>
-  mutate(cohort_end_date = postpartum_12_end) |>
-  dplyr::compute(name = "cif_overall_denominator", temporary = FALSE) |>
-  renameCohort(cohortId = 1, newCohortName = "overall_denominator")
-cif_mae_overall <- estimateSingleEventSurvival(
-  cdm = cdm,
-  targetCohortTable = "cif_overall_denominator",
-  outcomeCohortTable = "mae",
-  outcomeWashout = 0,
-  censorOnCohortExit = TRUE,
-  strata = strata
+  strata = strata,
+  minimumSurvivalDays = 0
 )
 
 ## Export CIF ----
 exportSummarisedResult(
   cif_aesi_30, cif_aesi_90, cif_aesi_180, cif_aesi_inf, cif_mae_pregnancy, 
   cif_mae_postpartum_6, cif_mae_postpartum_12, cif_mae_maternal_death, 
-  cif_mae_postpartum_12_sens, cif_mae_overall,
+  cif_mae_postpartum_12_sens, 
   path = output_folder,
   fileName = paste0("cumulative_incidence_", cdmName(cdm), ".csv")
 )
@@ -309,7 +305,7 @@ cdm$ir_postpartum_endometritis <- cdm$postpartum_6_weeks_denominator |>
 cdm$ir_postpartum_haemorrhage <- cdm$postpartum_12_weeks_denominator |>
   addCohortIntersectDate(
     targetCohortTable = "mae",
-    targetCohortId = c("postpartum_haemorrhage"),
+    targetCohortId = "postpartum_haemorrhage",
     indexDate = "cohort_start_date",
     censorDate = "cohort_end_date",
     targetDate = "cohort_start_date",
@@ -324,7 +320,7 @@ cdm$ir_postpartum_haemorrhage <- cdm$postpartum_12_weeks_denominator |>
 cdm$ir_postpartum_haemorrhage_sens <- cdm$postpartum_12_weeks_denominator_sens |>
   addCohortIntersectDate(
     targetCohortTable = "mae",
-    targetCohortId = c("postpartum_haemorrhage"),
+    targetCohortId = "postpartum_haemorrhage",
     indexDate = "cohort_start_date",
     censorDate = "cohort_end_date",
     targetDate = "cohort_start_date",
