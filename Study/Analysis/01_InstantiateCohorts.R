@@ -161,11 +161,11 @@ cdm$obesity <- cdm$base |>
 
 # bmi cohort
 cdm$bmi_overweight <- measurementCohort(
-  cdm = cdm, conceptSet = codelist["bmi_measurement"], name = "bmi_measurement",
+  cdm = cdm, conceptSet = codelist["bmi_measurement"], name = "bmi_overweight",
   valueAsNumber = list(c(30, 100))
 )
 cdm$bmi_underweight <- measurementCohort(
-  cdm = cdm, conceptSet = codelist["bmi_measurement"], name = "bmi_measurement",
+  cdm = cdm, conceptSet = codelist["bmi_measurement"], name = "bmi_underweight",
   valueAsNumber = list(c(6, 18))
 )
 cdm$bmi_pregnancy_overweight <- cdm$mother_table |>
@@ -206,7 +206,7 @@ cdm$body_weight <- measurementCohort(
   cdm = cdm, conceptSet = codelist["body_weight"], name = "body_weight",
   valueAsNumber = list("9529" = c(120, 200), "3195625" = c(265, 440))
 )
-cdm <- omopgenerics::bind(cdm$obesity, cdm$bmi_measurement, cdm$body_weight, cdm$bmi_pregnancy_overweight, name = "obesity")
+cdm <- omopgenerics::bind(cdm$obesity, cdm$body_weight, cdm$bmi_pregnancy_overweight, name = "obesity")
 cdm$obesity <- unionCohorts(cdm$obesity, cohortName = "obesity")
 
 cdm <- omopgenerics::bind(cdm$bmi_underweight, cdm$bmi_pregnancy_underweight, name = "underweight")
