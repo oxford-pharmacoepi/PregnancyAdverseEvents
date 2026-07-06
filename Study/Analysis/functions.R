@@ -81,19 +81,19 @@ getPregnantCohort <- function(db, cdm, mother_table_schema, mother_table_name) {
         pregnancy_single == 4188540 ~ "Multiple",
         pregnancy_single == 4188539 ~ "Singleton",
         pregnancy_single == 0 || is.na(pregnancy_single) ~ "Missing",
-        .default = pregnancy_single
+        .default = as.character(pregnancy_single)
       ),
       prev_pregnancy_parity = case_when(
         prev_pregnancy_parity == 4012561 ~ "Nulliparous",
         prev_pregnancy_parity == 4102166 ~ "Multiparous",
         prev_pregnancy_parity == 0 || is.na(prev_pregnancy_parity) ~ "Missing",
-        .default = prev_pregnancy_parity
+        .default = as.character(prev_pregnancy_parity)
       ),
       pregnancy_mode_delivery = case_when(
         pregnancy_mode_delivery == 4125611 ~ "Vaginal",
         pregnancy_mode_delivery == 4015701 ~ "C-section",
         pregnancy_mode_delivery == 0 || is.na(pregnancy_mode_delivery) ~ "Missing",
-        .default = pregnancy_mode_delivery
+        .default = as.character(pregnancy_mode_delivery)
       )
     ) |>
     compute(name = "mother_table", temporary = FALSE) |>
