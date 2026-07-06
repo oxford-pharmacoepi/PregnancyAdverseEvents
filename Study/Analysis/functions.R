@@ -65,10 +65,7 @@ getPregnantCohort <- function(db, cdm, mother_table_schema, mother_table_name) {
       nameStyle = "overlap"
     ) |>
     filter(overlap == 1) |>
-    select(!c(
-      "gestational_length_in_day", "prev_pregnancy_gravidity", "pregnancy_single",
-      "overlap", "pregnancy_mode_delivery"
-    )) |>
+    select(!c("gestational_length_in_day", "prev_pregnancy_gravidity", "overlap")) |>
     mutate(
       pregnancy_outcome_study = case_when(
         pregnancy_outcome == 4092289 ~ "livebirth",
@@ -79,10 +76,28 @@ getPregnantCohort <- function(db, cdm, mother_table_schema, mother_table_name) {
         pregnancy_outcome == 4081422 ~ "elective_termination",
         pregnancy_outcome == 4095714 ~ "discordant",
         .default = "unknown"
+      ),
+      pregnancy_single = case_when(
+        pregnancy_single == 4188540 ~ "Multiple",
+        pregnancy_single == 4188539 ~ "Singleton",
+        pregnancy_single == 0 || is.na(pregnancy_single) ~ "Missing",
+        .default = pregnancy_single
+      ),
+      prev_pregnancy_parity = case_when(
+        prev_pregnancy_parity == 4012561 ~ "Nulliparous",
+        prev_pregnancy_parity == 4102166 ~ "Multiparous",
+        prev_pregnancy_parity == 0 || is.na(prev_pregnancy_parity) ~ "Missing",
+        .default = prev_pregnancy_parity
+      ),
+      pregnancy_mode_delivery = case_when(
+        pregnancy_mode_delivery == 4125611 ~ "Vaginal",
+        pregnancy_mode_delivery == 4015701 ~ "C-section",
+        pregnancy_mode_delivery == 0 || is.na(pregnancy_mode_delivery) ~ "Missing",
+        .default = pregnancy_mode_delivery
       )
     ) |>
     compute(name = "mother_table", temporary = FALSE) |>
-    recordCohortAttrition(reason = "No overlapping pregnancy records")
+    recordCohortAttrition(reason = "No overlapping pregnancy records") 
   
   if (cdmName(cdm) %in% "CPRD GOLD") {
     smoking_observation <- cdm$observation |>
@@ -479,7 +494,34 @@ getBRCharacteristics <- function(cohort, strata) {
       window = list(c(-Inf, -1)),
       nameStyle = "previous_{cohort_name}",
       name = name
-    ) 
+    ) |>
+    addCohortIntersectCount(
+      targetCohortTable = "mother_table",
+      indexDate = "pregnancy_start_date",
+      targetStartDate = "pregnancy_start_date",
+      targetEndDate = NULL,
+      window = list(c(-Inf, -1)),
+      nameStyle = "previous_pregnancies",
+      name = name
+    ) |>
+    addConceptIntersectFlag(
+      conceptSet = list("pregnancy_induced_hypertension" = 4167493),
+      indexDate = "pregnancy_start_date",
+      censorDate = "pregnancy_end_date",
+      window = list(c(0, Inf)),
+      targetStartDate = "event_start_date",
+      nameStyle = "{concept_name}",
+      name = name
+    ) |>
+    addConceptIntersectFlag(
+      conceptSet = list("in_vitro_fertilisation" = c(2721237, 2721241, 2721248, 2788842, 3049700, 4020897, 4138627, 4138633, 4141534, 4142402, 4145664, 4199599, 4309021, 36712669, 40482399, 44517168, 46273065)),
+      indexDate = "pregnancy_start_date",
+      censorDate = "pregnancy_end_date",
+      window = list(c(-90, Inf)),
+      targetStartDate = "event_start_date",
+      nameStyle = "{concept_name}",
+      name = name
+    )
   
   maeNames <- settings(cdm$mae)$cohort_name
   estimates = c(
@@ -489,12 +531,17 @@ getBRCharacteristics <- function(cohort, strata) {
       'ethnicity' = c('count', 'percentage'),
       'socioeconomic_status' = c('count', 'percentage'),
       'maternal_age' = c('min', 'max', 'q25', 'q75', 'median', 'sd', 'mean'),
+      'previous_pregnancies' = c('min', 'max', 'q25', 'q75', 'median', 'sd', 'mean'),
       'maternal_age_group' = c('count', 'percentage'),
       'trimester' = c('count', 'percentage'),
       'nationallity' = c('count', 'percentage'),
       'birth_continent' = c('count', 'percentage'),
       'pregnancy_start_period' = c('count', 'percentage'),
-      'pre_pregnancy_smoking' = c('count', 'percentage')
+      'pre_pregnancy_smoking' = c('count', 'percentage'),
+      "pregnancy_single" = c('count', 'percentage'),
+      "prev_pregnancy_parity" = c('count', 'percentage'),
+      "pregnancy_outcome_study" = c('count', 'percentage'),
+      "pregnancy_mode_delivery" = c('count', 'percentage')
     ),
     rep(list(c('count', 'percentage')), length(maeNames)) |>
       setNames(maeNames),
@@ -1202,7 +1249,10 @@ getMatchedCohort <- function(cohort, outcomes, name) {
         cohort_end_date = cohort_start_date
       ) |>
       select(all_of(c(
-        "cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "pregnancy_start_date", "pregnancy_end_date", "pre_pregnancy_smoking", "maternal_age", strata
+        "cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date",
+        "pregnancy_start_date", "pregnancy_end_date", "pre_pregnancy_smoking", "maternal_age", 
+        "pregnancy_single", "prev_pregnancy_parity", "pregnancy_outcome_study", 
+        "pregnancy_mode_delivery", strata
       ))) |>
       compute(name = nameOriginal, temporary = FALSE, overwrite = TRUE) |>
       newCohortTable(
@@ -1216,7 +1266,9 @@ getMatchedCohort <- function(cohort, outcomes, name) {
       outcome_match <- cohort |>
         filter(.data[[paste0(outcome, "_status")]] == 0) |>
         select(all_of(c(
-          "subject_id", "pregnancy_start_date", "pregnancy_end_date", "pre_pregnancy_smoking", "maternal_age", "cohort_end_date", strata
+          "subject_id", "pregnancy_start_date", "pregnancy_end_date", "pre_pregnancy_smoking", 
+          "maternal_age", "cohort_end_date", "pregnancy_single", "prev_pregnancy_parity", 
+          "pregnancy_outcome_study", "pregnancy_mode_delivery", strata
         ))) |>
         mutate(
           pregnancy_start_band = if_else(
@@ -1245,7 +1297,11 @@ getMatchedCohort <- function(cohort, outcomes, name) {
               "matched_pregnancy_end_date" = "pregnancy_end_date",
               "matched_maternal_age" = "maternal_age",
               "matched_cohort_end_date" = "cohort_end_date",
-              "matched_pre_pregnancy_smoking" = "pre_pregnancy_smoking"
+              "matched_pre_pregnancy_smoking" = "pre_pregnancy_smoking",
+              "matched_pregnancy_outcome_study" = "pregnancy_outcome_study", 
+              "matched_pregnancy_single" = "pregnancy_single", 
+              "matched_prev_pregnancy_parity" = "prev_pregnancy_parity",
+              "matched_pregnancy_mode_delivery" = "pregnancy_mode_delivery" 
             ) |>
             rename_with(.fn = \(x){glue("matched_{x}")}, .cols = strata),
           by = c("age_group_sample", "pregnancy_start_band")
@@ -1278,6 +1334,10 @@ getMatchedCohort <- function(cohort, outcomes, name) {
           "pregnancy_end_date",
           "maternal_age",
           "pre_pregnancy_smoking",
+          "pregnancy_single", 
+          "pregnancy_outcome_study", 
+          "pregnancy_mode_delivery", 
+          "prev_pregnancy_parity",
           strata
         )) |>
         rename_with(.fn = \(x){gsub("matched_", "", x)}) |>
@@ -1288,6 +1348,10 @@ getMatchedCohort <- function(cohort, outcomes, name) {
           "pregnancy_end_date",
           "maternal_age",
           "pre_pregnancy_smoking",
+          "pregnancy_outcome_study", 
+          "pregnancy_single", 
+          "pregnancy_mode_delivery", 
+          "prev_pregnancy_parity",
           strata
         )) |>
         compute(name = nameMatch, temporary = FALSE, overwrite = TRUE) |>
@@ -1304,6 +1368,10 @@ getMatchedCohort <- function(cohort, outcomes, name) {
           "pregnancy_end_date",
           "maternal_age",
           "pre_pregnancy_smoking",
+          "pregnancy_outcome_study", 
+          "pregnancy_mode_delivery", 
+          "pregnancy_single", 
+          "prev_pregnancy_parity",
           strata
         )) |>
         compute(name = nameSample, temporary = FALSE, overwrite = TRUE) |>

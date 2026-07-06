@@ -25,7 +25,8 @@ cif_aesi_30 <- estimateSingleEventSurvival(
   outcomeWashout = 30,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 cif_aesi_90 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -34,7 +35,8 @@ cif_aesi_90 <- estimateSingleEventSurvival(
   outcomeWashout = 90,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 cif_aesi_180 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -43,7 +45,8 @@ cif_aesi_180 <- estimateSingleEventSurvival(
   outcomeWashout = 180,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 cif_aesi_inf <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -52,7 +55,8 @@ cif_aesi_inf <- estimateSingleEventSurvival(
   outcomeWashout = Inf,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 ### MAE pregnancy
 maePregnancy <- c(
@@ -69,7 +73,8 @@ cif_mae_pregnancy <- estimateSingleEventSurvival(
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 cif_mae_postpartum_12 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -79,7 +84,8 @@ cif_mae_postpartum_12 <- estimateSingleEventSurvival(
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 cif_mae_postpartum_12_sens <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -89,7 +95,8 @@ cif_mae_postpartum_12_sens <- estimateSingleEventSurvival(
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 cif_mae_postpartum_6 <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -99,7 +106,8 @@ cif_mae_postpartum_6 <- estimateSingleEventSurvival(
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 cif_mae_maternal_death <- estimateSingleEventSurvival(
   cdm = cdm,
@@ -109,7 +117,8 @@ cif_mae_maternal_death <- estimateSingleEventSurvival(
   outcomeWashout = 0,
   censorOnCohortExit = TRUE,
   strata = strata,
-  minimumSurvivalDays = 0
+  minimumSurvivalDays = 0,
+  eventGap = 7
 )
 
 ## Export CIF ----
