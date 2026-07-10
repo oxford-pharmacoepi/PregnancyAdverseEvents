@@ -87,7 +87,10 @@ cdm$pregnancy_denominator <- cdm$mother_table |>
 cdm$pregnancy_denominator <- cdm$pregnancy_denominator |>
   addAge(
     ageName = "maternal_age", 
-    ageGroup = list("maternal_age_group" = list("12 to 17" = c(12, 17), "18 to 34" = c(18, 34), "35 to 55" = c(35, 55)))
+    ageGroup = list(
+      "maternal_age_group" = list("12 to 17" = c(12, 17), "18 to 34" = c(18, 34), "35 to 55" = c(35, 55)),
+      "maternal_age_group_narrow" = list("12 to 17" = c(12, 17), "18 to 29" = c(18, 29), "30 to 39" = c(30, 39), "40 to 55" = c(40, 55))
+    )
   ) |>
   mutate(
     pregnancy_start_period = case_when(
@@ -103,7 +106,7 @@ cdm$pregnancy_denominator <- cdm$pregnancy_denominator |>
   addEthnicity() |>
   compute(name = "pregnancy_denominator", temporary = FALSE)
 
-strata <- list("maternal_age_group", "pregnancy_start_period")
+strata <- list("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_study")
 if (grepl("SIDIAP", cdmName(cdm))) {
   strata <- c(strata, list("socioeconomic_status", "nationallity"))
 }

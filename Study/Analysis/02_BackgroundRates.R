@@ -1,4 +1,4 @@
-strata <- list("maternal_age_group", "pregnancy_start_period")
+strata <- list("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_study")
 if (grepl("SIDIAP", cdmName(cdm))) {
   strata <- c(strata, list("socioeconomic_status", "nationallity"))
 }

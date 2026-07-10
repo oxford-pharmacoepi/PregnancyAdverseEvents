@@ -544,6 +544,7 @@ getBRCharacteristics <- function(cohort, strata) {
       'maternal_age' = c('min', 'max', 'q25', 'q75', 'median', 'sd', 'mean'),
       'previous_pregnancies' = c('min', 'max', 'q25', 'q75', 'median', 'sd', 'mean'),
       'maternal_age_group' = c('count', 'percentage'),
+      'maternal_age_group_narrow' = c('count', 'percentage'),
       'trimester' = c('count', 'percentage'),
       'nationallity' = c('count', 'percentage'),
       'birth_continent' = c('count', 'percentage'),
@@ -1233,7 +1234,7 @@ getMatchedCohort <- function(cohort, outcomes, name) {
   onlyPostpartumSens <- c("postpartum_haemorrhage_sens")
   postpartum <- "maternal_death"
   
-  strata <- c("maternal_age_group", "pregnancy_start_period")
+  strata <- c("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_study")
   if (grepl("SIDIAP", cdmName(cdm))) {
     strata <- c(strata, "socioeconomic_status", "nationallity")
   }
@@ -1262,7 +1263,7 @@ getMatchedCohort <- function(cohort, outcomes, name) {
       select(all_of(c(
         "cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date",
         "pregnancy_start_date", "pregnancy_end_date", "pre_pregnancy_smoking", "maternal_age", 
-        "pregnancy_single", "prev_pregnancy_parity", "pregnancy_outcome_study", 
+        "pregnancy_single", "prev_pregnancy_parity", 
         "pregnancy_mode_delivery", strata
       ))) |>
       compute(name = nameOriginal, temporary = FALSE, overwrite = TRUE) |>
@@ -1279,7 +1280,7 @@ getMatchedCohort <- function(cohort, outcomes, name) {
         select(all_of(c(
           "subject_id", "pregnancy_start_date", "pregnancy_end_date", "pre_pregnancy_smoking", 
           "maternal_age", "cohort_end_date", "pregnancy_single", "prev_pregnancy_parity", 
-          "pregnancy_outcome_study", "pregnancy_mode_delivery", strata
+          "pregnancy_mode_delivery", strata
         ))) |>
         mutate(
           pregnancy_start_band = if_else(
@@ -1309,7 +1310,6 @@ getMatchedCohort <- function(cohort, outcomes, name) {
               "matched_maternal_age" = "maternal_age",
               "matched_cohort_end_date" = "cohort_end_date",
               "matched_pre_pregnancy_smoking" = "pre_pregnancy_smoking",
-              "matched_pregnancy_outcome_study" = "pregnancy_outcome_study", 
               "matched_pregnancy_single" = "pregnancy_single", 
               "matched_prev_pregnancy_parity" = "prev_pregnancy_parity",
               "matched_pregnancy_mode_delivery" = "pregnancy_mode_delivery" 
@@ -1346,7 +1346,6 @@ getMatchedCohort <- function(cohort, outcomes, name) {
           "maternal_age",
           "pre_pregnancy_smoking",
           "pregnancy_single", 
-          "pregnancy_outcome_study", 
           "pregnancy_mode_delivery", 
           "prev_pregnancy_parity",
           strata
@@ -1359,7 +1358,6 @@ getMatchedCohort <- function(cohort, outcomes, name) {
           "pregnancy_end_date",
           "maternal_age",
           "pre_pregnancy_smoking",
-          "pregnancy_outcome_study", 
           "pregnancy_single", 
           "pregnancy_mode_delivery", 
           "prev_pregnancy_parity",
@@ -1379,7 +1377,6 @@ getMatchedCohort <- function(cohort, outcomes, name) {
           "pregnancy_end_date",
           "maternal_age",
           "pre_pregnancy_smoking",
-          "pregnancy_outcome_study", 
           "pregnancy_mode_delivery", 
           "pregnancy_single", 
           "prev_pregnancy_parity",
