@@ -677,16 +677,6 @@ influenza_vaccine,40213159,"influenza virus vaccine, whole virus",S
 influenza_vaccine,40213152,"Seasonal, quadrivalent, recombinant, injectable influenza vaccine, preservative free",S
 influenza_vaccine,40213157,"Seasonal trivalent influenza vaccine, adjuvanted, preservative free",S
 influenza_vaccine,40213151,"Seasonal, trivalent, recombinant, injectable influenza vaccine, preservative free",S
-non_smoker,903651,Currently doesn't use tobacco or its derivatives,S
-non_smoker,42742406,Current tobacco non-smoker and not currently exposed to secondhand smoke (Asthma),S
-non_smoker,2101897,"Current tobacco non-user (CAD, CAP, COPD, PV) (DM) (IBD)",S
-non_smoker,2617856,Current tobacco non-user (Deprecated),S
-non_smoker,4144272,Never smoked tobacco,N
-non_smoker,903653,Never used tobacco or its derivatives,S
-non_smoker,4222303,Non-smoker,N
-non_smoker,40329152,Non-smoker (& [never smoked tobacco]),N
-non_smoker,40298657,Non-smoker (& [never smoked tobacco]),N
-non_smoker,45879404,Never smoker,S
 obesity,604591,6q16 microdeletion syndrome,S
 obesity,4271317,Adiposogenital dystrophy,S
 obesity,4171972,Adult-onset obesity,S
@@ -767,120 +757,6 @@ polycystic_ovary_syndrome,3654296,Polycystic ovary syndrome of bilateral ovaries
 polycystic_ovary_syndrome,3654295,Polycystic ovary syndrome of left ovary,S
 polycystic_ovary_syndrome,3654294,Polycystic ovary syndrome of right ovary,S
 polycystic_ovary_syndrome,3654292,Polycystic right ovary,S
-smoker,40766642,Are you considering quitting smoking during the next 6 months [PLCO],S
-smoker,4044778,Chain smoker,N
-smoker,4047454,Cigar consumption,N
-smoker,4276526,Cigarette smoker,N
-smoker,903657,Cigarette smoker,S
-smoker,764104,Cigarette smoker (1-4 cigarettes/day),N
-smoker,764103,Cigarette smoker (5-9 cigarettes/day),N
-smoker,4282779,Cigarette smoking tobacco,S
-smoker,4246415,Cigar smoker,N
-smoker,903664,Cigar smoker,S
-smoker,4132133,Cigar smoking tobacco,S
-smoker,764468,Continuous dependence on chewing tobacco,N
-smoker,765451,Continuous dependence on cigarette smoking,N
-smoker,40766945,Current smoker,S
-smoker,44802867,Current smoker annual review,N
-smoker,2101895,"Current tobacco smoker (CAD, CAP, COPD, PV) (DM)",S
-smoker,2617854,Current tobacco smoker (Deprecated),S
-smoker,44786481,Documentation that patient is a current tobacco user,S
-smoker,764383,Enrollment in smoking cessation program,S
-smoker,764471,Episodic dependence on chewing tobacco,S
-smoker,764469,Episodic dependence on cigarette smoking,S
-smoker,40486518,Failed attempt to stop smoking,N
-smoker,4041511,Heavy cigarette smoker,N
-smoker,903661,Heavy cigarette smoker (20-39 cigarettes per day),S
-smoker,4052947,Heavy cigarette smoker (20-39 cigs/day),N
-smoker,4209006,Heavy smoker (over 20 per day),N
-smoker,762499,Heavy tobacco smoker,N
-smoker,44784248,Hookah pipe smoker,N
-smoker,903665,Hookah smoker,S
-smoker,40766643,"In the past, have you ever made a serious attempt to quit smoking That is, have you stopped smoking for at least one day or longer because you were trying to quit [PLCO]",S
-smoker,4052948,Keeps trying to stop smoking,N
-smoker,600776,Lack of support for smoking cessation,S
-smoker,4042037,Light cigarette smoker,N
-smoker,903659,Light cigarette smoker (1-9 cigarettes per day),S
-smoker,4052029,Light cigarette smoker (1-9 cigs/day),N
-smoker,762498,Light tobacco smoker,N
-smoker,42534813,Maternal tobacco use in pregnancy,N
-smoker,4131520,Minutes from waking to first tobacco consumption,N
-smoker,4044776,Moderate cigarette smoker,N
-smoker,903660,Moderate cigarette smoker (10-19 cigarettes per day),S
-smoker,4052030,Moderate cigarette smoker (10-19 cigs/day),N
-smoker,4209585,Moderate smoker (20 or less per day),N
-smoker,4193014,Negotiated date for cessation of smoking,S
-smoker,4209423,Nicotine dependence,S
-smoker,619068,Nondependent abuse of tobacco,N
-smoker,4216174,Not interested in stopping smoking,N
-smoker,44811339,Number of previous attempts to stop smoking,N
-smoker,4044775,Occasional cigarette smoker,N
-smoker,37395605,Occasional tobacco smoker,N
-smoker,903663,Pipe smoker,S
-smoker,4218917,Pipe smoker,N
-smoker,4224317,Pipe smoking tobacco,S
-smoker,4041509,Pipe tobacco consumption,N
-smoker,4215409,Ready to stop smoking,N
-smoker,4293731,Reason for restarting smoking,N
-smoker,4058138,Rolls own cigarettes,N
-smoker,1617736,Smoked cigarette within 30M after waking in past 3 months,S
-smoker,1617232,Smoked more than 10 cigarettes per day in past 3 months,S
-smoker,4298794,Smoker,N
-smoker,36716991,Smoker in home,N
-smoker,4263877,Smokers' cough,S
-smoker,4126918,Smokers keratosis,S
-smoker,46270550,Smoker's melanosis,S
-smoker,4028286,Smoker's respiratory syndrome,S
-smoker,42709996,Smokes tobacco daily,N
-smoker,4001198,Smoking-pipe maker,S
-smoker,4046886,Smoking reduced,N
-smoker,4204653,Smoking restarted,N
-smoker,4141787,Smoking started,N
-smoker,4190573,Thinking about stopping smoking,N
-smoker,4148163,Tobacco amblyopia,S
-smoker,37109024,Tobacco dependence caused by chewing tobacco,N
-smoker,37109023,Tobacco dependence caused by cigarettes,N
-smoker,4099811,"Tobacco dependence, continuous",S
-smoker,4103417,"Tobacco dependence, episodic",S
-smoker,437264,Tobacco dependence syndrome,S
-smoker,3655996,Tobacco dependence with current use,N
-smoker,4315821,Tobacco deposit on teeth,S
-smoker,903654,Tobacco or its derivatives user,S
-smoker,4150993,Tobacco related optic neuropathy,S
-smoker,764198,Tobacco smoking in mother complicating childbirth,N
-smoker,764199,Tobacco smoking in mother complicating pregnancy,N
-smoker,764197,Tobacco smoking in mother complicating puerperium,N
-smoker,21494888,Tobacco smoking status for tobacco smoker,S
-smoker,45757177,Tobacco use in mother complicating childbirth,N
-smoker,764196,Tobacco use in mother complicating pregnancy,N
-smoker,764195,Tobacco use in mother complicating puerperium,N
-smoker,36031616,Tobacco use in the past year,S
-smoker,4005823,Tobacco user,N
-smoker,903658,Trivial cigarette smoker (0-1 cigarettes per day),S
-smoker,4144273,Trivial cigarette smoker (less than one cigarette/day),N
-smoker,4058137,Trying to give up smoking,N
-smoker,4044777,Very heavy cigarette smoker,N
-smoker,4058136,Very heavy cigarette smoker (40+ cigs/day),N
-smoker,903662,Very heavy cigarette smoker (more or equal to 40 cigarettes per day),S
-smoker,44789712,Wants to stop smoking,N
-smoker,40766644,What was the longest length of time you stopped smoking because you were trying to quit [PLCO],S
-smoker,45884037,Current some day smoker,S
-smoker,46272634,Counseling about tobacco use,S
-smoker,37167370,Fetal disorder caused by maternal tobacco via placenta,S
-stop_smoking,37020654,Age when stopped smoking cigarettes completely,S
-stop_smoking,44802805,Recently stopped smoking,N
-stop_smoking,3558278,Recently stopped smoking,N
-stop_smoking,45461579,Recently stopped smoking,N
-stop_smoking,45491652,Stopped smoking,N
-stop_smoking,3472723,Stopped smoking,N
-stop_smoking,4052032,Stopped smoking,N
-stop_smoking,40298679,Stopped smoking,N
-stop_smoking,3090238,Stopped smoking,N
-stop_smoking,40486722,Stopped smoking before pregnancy,N
-stop_smoking,3558649,Stopped smoking before pregnancy,N
-stop_smoking,3558648,Stopped smoking during pregnancy,N
-stop_smoking,40486721,Stopped smoking during pregnancy,N
-stop_smoking,45883458,Former smoker,S
 substance_misuse_dependence,4089921,Abuse of antacids,S
 substance_misuse_dependence,440992,Abuse of antidepressant drug,S
 substance_misuse_dependence,4091716,Abuse of diuretics,S
