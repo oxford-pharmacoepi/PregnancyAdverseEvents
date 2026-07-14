@@ -10,7 +10,8 @@ cdm$pregnancy_denominator <- cdm$mother_table |>
   select(all_of(c(
     "cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", 
     "pregnancy_start_date", "pregnancy_end_date", "observation_period_end_date",
-    "pregnancy_outcome_study", "pre_pregnancy_smoking"
+    "pregnancy_outcome_study", "pre_pregnancy_smoking", "pregnancy_single", 
+    "prev_pregnancy_parity", "pregnancy_mode_delivery"
   ))) |>
   compute(name = "pregnancy_denominator", temporary = FALSE) |>
   newCohortTable(
