@@ -408,10 +408,10 @@ addSocioeconomicStatus <- function(cohort) {
       filter(observation_concept_id == 4076114, year(observation_date) == 2020) |>
       pull(value_as_number)
     quintiles <- quantile(values2020, probs = c(0.2, 0.4, 0.6, 0.8), na.rm = TRUE)
-    q1 <- as.numeric(quintiles[[1]])
-    q2 <- as.numeric(quintiles[[2]])
+    q5 <- as.numeric(quintiles[[1]])
+    q4 <- as.numeric(quintiles[[2]])
     q3 <- as.numeric(quintiles[[3]])
-    q4 <- as.numeric(quintiles[[4]])
+    q2 <- as.numeric(quintiles[[4]])
     
     # people who have both 2020 and 2021
     tableSES <- cdm$observation |>
@@ -428,11 +428,11 @@ addSocioeconomicStatus <- function(cohort) {
       mutate(
         socioeconomic_status = case_when(
           is.na(value_as_number) ~ "Missing",
-          value_as_number <= q1  ~ "Q1",
+          value_as_number <= q5  ~ "Q5",
           value_as_number <= q2  ~ "Q2",
           value_as_number <= q3  ~ "Q3",
-          value_as_number <= q4  ~ "Q4",
-          value_as_number >  q4  ~ "Q5",
+          value_as_number <= q2  ~ "Q2",
+          value_as_number >  q2 ~ "Q1",
           .default               = "Missing"
         )
       ) |>
@@ -500,19 +500,20 @@ getBRCharacteristics <- function(cohort, strata) {
     ) |>
     addCohortIntersectFlag(
       targetCohortTable = "mae",
+      targetCohortId = "maternal_death",
+      indexDate = "pregnancy_start_date",
+      censorDate = "postpartum_6_weeks",
+      targetStartDate = "cohort_start_date",
+      window = list(c(0, Inf)),
+      nameStyle = "{cohort_name}",
+      name = name
+    ) |>
+    addCohortIntersectFlag(
+      targetCohortTable = "mae",
       indexDate = "pregnancy_start_date",
       targetStartDate = "cohort_start_date",
       window = list(c(-Inf, -1)),
       nameStyle = "previous_{cohort_name}",
-      name = name
-    ) |>
-    addCohortIntersectCount(
-      targetCohortTable = "mother_table",
-      indexDate = "pregnancy_start_date",
-      targetStartDate = "pregnancy_start_date",
-      targetEndDate = NULL,
-      window = list(c(-Inf, -1)),
-      nameStyle = "previous_pregnancies",
       name = name
     ) |>
     addConceptIntersectFlag(
@@ -542,7 +543,7 @@ getBRCharacteristics <- function(cohort, strata) {
       'ethnicity' = c('count', 'percentage'),
       'socioeconomic_status' = c('count', 'percentage'),
       'maternal_age' = c('min', 'max', 'q25', 'q75', 'median', 'sd', 'mean'),
-      'previous_pregnancies' = c('min', 'max', 'q25', 'q75', 'median', 'sd', 'mean'),
+      'previous_pregnancy' = c('count', 'percentage'),
       'maternal_age_group' = c('count', 'percentage'),
       'maternal_age_group_narrow' = c('count', 'percentage'),
       'trimester' = c('count', 'percentage'),
@@ -553,7 +554,9 @@ getBRCharacteristics <- function(cohort, strata) {
       "pregnancy_single" = c('count', 'percentage'),
       "prev_pregnancy_parity" = c('count', 'percentage'),
       "pregnancy_outcome_study" = c('count', 'percentage'),
-      "pregnancy_mode_delivery" = c('count', 'percentage')
+      "pregnancy_mode_delivery" = c('count', 'percentage'),
+      "in_vitro_fertilisation" = c('count', 'percentage'),
+      "pregnancy_induced_hypertension" = c('count', 'percentage')
     ),
     rep(list(c('count', 'percentage')), length(maeNames)) |>
       setNames(maeNames),
@@ -568,17 +571,13 @@ getBRCharacteristics <- function(cohort, strata) {
       demographics = TRUE,
       strata = strata,
       cohortIntersectFlag = list(
-        # covariatesInf (-Inf, 0)
-        "History of comorbidities" = list(
-          targetCohortTable = "covariates_inf", window = c(-Inf, 0)
-        ),
-        # covariates1 (-365, 0)
+        # covariates1 (-365, -1)
         "Covariates in the past year" = list(
-          targetCohortTable = "covariates_5", window = c(-365, 0)
+          targetCohortTable = "covariates", window = c(-365, -1)
         ),
         # Comedications
         "Medications in the past 6 months" = list(
-          targetCohortTable = "comedications", window = c(-180, 0)
+          targetCohortTable = "comedications", window = c(-180, -1)
         )
       ),
       otherVariables = otherVariables,
@@ -679,7 +678,7 @@ getAntepartumDenominator <- function(cohort) {
 
 getPostpartum6Denominator <- function(cohort) {
   cohort |>
-    filter(pregnancy_outcome_study != "miscarriage") |>
+    filter(pregnancy_outcome_study == "livebirth") |>
     mutate(
       cohort_start_date = pregnancy_end_date,
       cohort_end_date = postpartum_6_end
@@ -696,7 +695,7 @@ getPostpartum6Denominator <- function(cohort) {
 
 getPostpartum12DenominatorSensitivity <- function(cohort) {
   cohort |>
-    filter(pregnancy_outcome_study != "miscarriage") |>
+    filter(pregnancy_outcome_study == "livebirth") |>
     mutate(
       cohort_start_date = postpartum_12_start,
       cohort_end_date = postpartum_12_end
@@ -713,7 +712,7 @@ getPostpartum12DenominatorSensitivity <- function(cohort) {
 
 getPostpartum12Denominator <- function(cohort) {
   cohort |>
-    filter(pregnancy_outcome_study != "miscarriage") |>
+    filter(pregnancy_outcome_study == "livebirth") |>
     mutate(
       cohort_start_date = pregnancy_end_date,
       cohort_end_date = postpartum_12_end
@@ -1228,13 +1227,13 @@ addByPeriodEvents <- function(x, cohort) {
 getMatchedCohort <- function(cohort, outcomes, name) {
   tmp <- tmpPrefix()
   tabName <- paste0(tmp, "matching")
-  cdm <- omopgenerics::emptyCohortTable(cdm = cdm, name = tabName)
+  cdm <- omopgenerics::emptyCohortTable(cdm = cdm, name = tabName, overwrite = TRUE)
   
   onlyPostpartum <- c("postpartum_endometritis", "postpartum_haemorrhage")
   onlyPostpartumSens <- c("postpartum_haemorrhage_sens")
   postpartum <- "maternal_death"
   
-  strata <- c("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_study")
+  strata <- c("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_strata", "previous_pregnancy")
   if (grepl("SIDIAP", cdmName(cdm))) {
     strata <- c(strata, "socioeconomic_status", "nationallity")
   }

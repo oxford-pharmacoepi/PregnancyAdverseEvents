@@ -11,7 +11,7 @@ cdm$characteristics_dysfunctional_labour <- getMatchedCohort(cdm$ir_dysfunctiona
 cdm$characteristics_maternal_death <- getMatchedCohort(cdm$ir_maternal_death, "maternal_death", name = "characteristics_maternal_death")
 cdm$characteristics_postpartum_endometritis <- getMatchedCohort(cdm$ir_postpartum_endometritis, "postpartum_endometritis", name = "characteristics_postpartum_endometritis")
 cdm$characteristics_postpartum_haemorrhage <- getMatchedCohort(cdm$ir_postpartum_haemorrhage, "postpartum_haemorrhage", name = "characteristics_postpartum_haemorrhage")
-cdm$characteristics_postpartum_haemorrhage_sens <- getMatchedCohort(cdm$ir_postpartum_haemorrhage_sens, "postpartum_haemorrhage_sens", name = "characteristics_postpartum_haemorrhage_sens")
+cdm$characteristics_pph_sens <- getMatchedCohort(cdm$ir_postpartum_haemorrhage_sens, "postpartum_haemorrhage_sens", name = "characteristics_pph_sens")
 cdm$characteristics_preterm_labour <- getMatchedCohort(cdm$ir_preterm_labour, "preterm_labour", name = "characteristics_preterm_labour")
 if ("miscarriage" %in% settings(cdm$mae)$cohort_name){
  cdm$characteristics_miscarriage <- getMatchedCohort(cdm$ir_miscarriage, "miscarriage", name = "characteristics_miscarriage")
@@ -29,7 +29,7 @@ if ("miscarriage" %in% settings(cdm$mae)$cohort_name){
   cdm$characteristics_postpartum_endometritis, cdm$characteristics_postpartum_haemorrhage, 
   cdm$characteristics_preterm_labour, cdm$characteristics_miscarriage, cdm$characteristics_stillbirth, 
   cdm$pregnancy_denominator, cdm$characteristics_antepartum_haemorrhage,
-  cdm$characteristics_postpartum_haemorrhage_sens,
+  cdm$characteristics_pph_sens,
   cdm$characteristics_dysfunctional_labour,
   name = "characteristics_br"
 ) 
@@ -40,7 +40,7 @@ if ("miscarriage" %in% settings(cdm$mae)$cohort_name){
   cdm$characteristics_postpartum_endometritis, cdm$characteristics_postpartum_haemorrhage, 
   cdm$characteristics_preterm_labour, cdm$characteristics_stillbirth, 
   cdm$pregnancy_denominator, cdm$characteristics_antepartum_haemorrhage,
-  cdm$characteristics_postpartum_haemorrhage_sens,
+  cdm$characteristics_pph_sens,
   cdm$characteristics_dysfunctional_labour,
   name = "characteristics_br"
 ) 
@@ -64,7 +64,7 @@ cdm$characteristics_br <- cdm$characteristics_br |>
   compute(name = "characteristics_br", temporary = FALSE) |>
   addSeason()
 
-strata <- list("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_study")
+strata <- list("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_strata", "previous_pregnancy")
 if (grepl("SIDIAP", cdmName(cdm))) {
   strata <- c(strata, list("socioeconomic_status", "nationallity"))
 }

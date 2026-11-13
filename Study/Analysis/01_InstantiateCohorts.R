@@ -86,6 +86,15 @@ cdm$pregnancy_denominator <- cdm$mother_table |>
 
 ### Add strata
 cdm$pregnancy_denominator <- cdm$pregnancy_denominator |>
+  addCohortIntersectFlag(
+    targetCohortTable = "mother_table",
+    indexDate = "pregnancy_start_date",
+    targetStartDate = "pregnancy_start_date",
+    targetEndDate = NULL,
+    window = list(c(-Inf, -1)),
+    nameStyle = "previous_pregnancy",
+    name = "pregnancy_denominator"
+  ) |>
   addAge(
     ageName = "maternal_age", 
     ageGroup = list(
@@ -98,6 +107,9 @@ cdm$pregnancy_denominator <- cdm$pregnancy_denominator |>
       year(pregnancy_start_date) %in% 2018:2019 ~ "Pre COVID-19",
       year(pregnancy_start_date) %in% 2020:2021 ~ "COVID-19 main outbreak",
       .default = "Post COVID-19 main outbreak"
+    ),
+    pregnancy_outcome_strata = if_else(
+      pregnancy_outcome_study == "livebirth", "livebirth", "non_livebirth"
     )
   ) |>
   compute(name = "pregnancy_denominator", temporary = FALSE)
@@ -107,12 +119,20 @@ cdm$pregnancy_denominator <- cdm$pregnancy_denominator |>
   addEthnicity() |>
   compute(name = "pregnancy_denominator", temporary = FALSE)
 
-strata <- list("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_study")
+strata <- list("maternal_age_group", "pregnancy_start_period", "maternal_age_group_narrow", "pregnancy_outcome_strata", "previous_pregnancy")
 if (grepl("SIDIAP", cdmName(cdm))) {
   strata <- c(strata, list("socioeconomic_status", "nationallity"))
 }
 if (grepl("CPRD", cdmName(cdm))) {
   strata <- c(strata, list("socioeconomic_status", "ethnicity"))
+  # algorithm does not distinguish terminations from miscarriages
+  cdm$pregnancy_denominator <- cdm$pregnancy_denominator |> 
+    mutate(
+      pregnancy_outcome_study = if_else(
+        pregnancy_outcome_study %in% c("miscarriage", "elective_termination") ~ "non_livebirth",
+        pregnancy_outcome_study
+      )
+    )
 }
 if (grepl("NLHR@UiO", cdmName(cdm))) {
   strata <- c(strata, list("birth_continent"))
@@ -210,7 +230,7 @@ cdm$body_weight <- measurementCohort(
   cdm = cdm, conceptSet = codelist["body_weight"], name = "body_weight",
   valueAsNumber = list("9529" = c(120, 200), "3195625" = c(265, 440))
 )
-cdm <- omopgenerics::bind(cdm$obesity, cdm$body_weight, cdm$bmi_pregnancy_overweight, name = "obesity")
+cdm <- omopgenerics::bind(cdm$obesity, cdm$bmi_overweight, cdm$body_weight, cdm$bmi_pregnancy_overweight, name = "obesity")
 cdm$obesity <- unionCohorts(cdm$obesity, cohortName = "obesity")
 
 cdm <- omopgenerics::bind(cdm$bmi_underweight, cdm$bmi_pregnancy_underweight, name = "underweight")
@@ -223,19 +243,24 @@ covariatesInf <- c(
   "asthma", "diabetes", "essential_hypertension", "hiv", "uterus_malformations",
   "polycystic_ovary_syndrome", "systemic_lupus_erythematosus", "thyroid_disorder",
   "epilepsy", "chronic_viral_hepatitis", "inflammatory_bowel_disease", 
-  "venous_thromboembolism", "malignant_neoplastic_disease", "ckd"
+  "ckd"
 )
-covariates5 <- c(
-  "alcohol_misuse_dependence", "anxiety", "depression"
+covariates1 <- c(
+  "alcohol_misuse_dependence", "anxiety", "depression", 
+  "venous_thromboembolism", "malignant_neoplastic_disease"
 )
 ## All history
 cdm$covariates_inf <- cdm$base |>
   subsetCohorts(cohortId = covariatesInf, name = "covariates_inf") |>
-  requireIsFirstEntry()
-## 5 years
-cdm$covariates_5 <-  cdm$base |>
-  subsetCohorts(cohortId = covariates5, name = "covariates_5")
-cdm <- omopgenerics::bind(cdm$obesity, cdm$covariates_5, cdm$underweight, name = "covariates_5")
+  exitAtObservationEnd()
+## 1 year
+cdm$covariates_1 <-  cdm$base |>
+  subsetCohorts(cohortId = covariates1, name = "covariates_1")
+## Covariates
+cdm <- omopgenerics::bind(
+  cdm$covariates_1, cdm$covariates_inf, cdm$underweight, cdm$obesity, 
+  name = "covariates"
+)
 
 ## Comedications ----
 comedications <- c(
@@ -244,7 +269,8 @@ comedications <- c(
   "antithrombotics", "corticosteroids", "immunosupressants"
 )
 cdm$comedications <- cdm$base |>
-  subsetCohorts(cohortId = comedications, name = "comedications")
+  subsetCohorts(cohortId = comedications, name = "comedications") |> 
+  collapseCohorts(gap = 30)
 
 ## AESI ----
 info(logger, "- AESI")
@@ -482,8 +508,7 @@ bind(
   summaryCohort(cdm$aesi), 
   summaryCohort(cdm$mae), 
   summaryCohort(cdm$comedications), 
-  summaryCohort(cdm$covariates_inf),
-  summaryCohort(cdm$covariates_5)
+  summaryCohort(cdm$covariates)
 ) |>
   exportSummarisedResult(path = output_folder, fileName = paste0("cohort_summary_br_", cdmName(cdm), ".csv"))
 
@@ -491,7 +516,6 @@ bind(
   cohortCodeUseFromCohort(cdm$aesi),
   cohortCodeUseFromCohort(cdm$mae),
   cohortCodeUseFromCohort(cdm$comedications), 
-  cohortCodeUseFromCohort(cdm$covariates_inf),
-  cohortCodeUseFromCohort(cdm$covariates_5)
+  cohortCodeUseFromCohort(cdm$covariates)
 ) |>
   exportSummarisedResult(path = output_folder, fileName = paste0("cohort_code_use_br_", cdmName(cdm), ".csv"))

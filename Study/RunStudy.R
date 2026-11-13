@@ -79,7 +79,7 @@ if (runBackgroundRates) {
       cdmName = database_name,
       cohortTables = c(
         "mother_table", "aesi_90", "aesi_30", "aesi_inf", "mae", "comedications",
-        "covariates_inf", "covariates_5", "base", "thrombocytopenia", "aesi_180",
+        "covariates", "base", "thrombocytopenia", "aesi_180",
         "pregnancy_denominator", "miscarriage_denominator", "stillbirth_denominator", 
         "preterm_labour_denominator", "postpartum_6_weeks_denominator", 
         "postpartum_12_weeks_denominator", "maternal_death_denominator",
@@ -103,8 +103,7 @@ if (runBRCharacteristics) {
       cdmName = database_name,
       cohortTables = c(
         "mother_table", "mae", "comedications", "pregnancy_denominator", 
-        "covariates_inf", "covariates_5", 
-        "aesi_90", "aesi_30", "aesi_inf", "mae", "aesi_180",
+        "covariates", "aesi_90", "aesi_30", "aesi_inf", "mae", "aesi_180",
         "ir_aesi_30", "ir_aesi_inf", "ir_aesi_90", "ir_aesi_180",
         "ir_mae", "ir_maternal_death", "ir_postpartum_endometritis",
         "ir_postpartum_haemorrhage", "ir_preterm_labour", "ir_miscarriage", 
