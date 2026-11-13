@@ -6,7 +6,6 @@ resultList <- list(
   cohort_code_use = list(result_type = "cohort_code_use"),
   summarise_characteristics = list(result_type = "summarise_characteristics"),
   summarise_large_scale_characteristics = list(result_type = "summarise_large_scale_characteristics"),
-  survival = list(result_type = c("survival_probability", "survival_events", "survival_summary", "survival_attrition")),
   incidence = list(result_type = "")
 )
 
@@ -36,11 +35,6 @@ result <- result |>
       .default = .data$additional_level
     ),
     group_level = dplyr::if_else(group_level == "overall_denominator", "pregnancy_and_12_weeks_postpartum", .data$group_level),
-    strata_level = dplyr::case_when(
-      strata_level == "0" ~ "No previous pregnancy",
-      strata_level == "1" ~ "≥1 previous pregnancy",
-      .default = .data$strata_level
-    ), 
     dplyr::across(
       c("strata_level", "variable_level"), 
       ~ dplyr::case_when(
@@ -123,13 +117,9 @@ values$survival_target_cohort <- unique(gsub("2_", "_12_", gsub("_1", "", values
 values$survival_target_cohort <- values$survival_target_cohort[values$survival_target_cohort != "overall_denominator"]
 values$summarise_characteristics_variable_name <- c(
   "Number records", "Number subjects", "Trimester", "Maternal age group", 
-  "Maternal age group narrow", "In vitro fertilisation", 
-  "Pregnancy induced hypertension", "Age", 
   "Pregnancy start period", "Socioeconomic status", "Nationallity", "Season",
   "Ethnicity", "Birth continent",
-  "Maternal age", "Pre-Pregnancy Smoke", "Previous pregnancies", 
-  "Pregnancy outcome study", "Previous pregnancy parity", 
-  "Pregnancy mode delivery", "Pregnancy single",
+  "Maternal age", "Pre-Pregnancy Smoke",
   "Maternal Adverse Events during pregnancy", 
   "Maternal Adverse Events during previous pregnancy",
   "Prior observation", "Days in cohort", "History of comorbidities",

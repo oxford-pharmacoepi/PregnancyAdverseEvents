@@ -136,70 +136,6 @@ ui <- bslib::page_navbar(
                   shinycssloaders::withSpinner()
               )
             )
-          ),
-          bslib::nav_panel(
-            title = "Plot Counts",
-            bslib::card(
-              full_screen = TRUE,
-              bslib::card_header(
-                bslib::popover(
-                  shiny::icon("download"),
-                  shiny::numericInput(
-                    inputId = "summarise_cohort_count_plot_width",
-                    label = "Width",
-                    value = 15
-                  ),
-                  shiny::numericInput(
-                    inputId = "summarise_cohort_count_plot_height",
-                    label = "Height",
-                    value = 15
-                  ),
-                  shinyWidgets::pickerInput(
-                    inputId = "summarise_cohort_count_plot_units",
-                    label = "Units",
-                    choices = c("px", "cm", "inch"),
-                    selected = "cm",
-                    multiple = FALSE,
-                    options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                  ),
-                  shiny::numericInput(
-                    inputId = "summarise_cohort_count_plot_dpi",
-                    label = "DPI",
-                    value = 300
-                  ),
-                  shiny::downloadButton(outputId = "summarise_cohort_count_plot_download", label = "Download plot")
-                ),
-                class = "text-end"
-              ),
-              bslib::layout_sidebar(
-                sidebar = bslib::sidebar(
-                  shinyWidgets::materialSwitch(
-                    inputId = "summarise_cohort_count_plot_interactive",
-                    label = "Interactive",
-                    value = TRUE
-                  ),
-                  shinyWidgets::pickerInput(
-                    inputId = "summarise_cohort_count_plot_facet",
-                    label = "Facet",
-                    choices = c("cdm_name", "cohort_name", "table_name", "weighting"),
-                    selected = "cdm_name",
-                    multiple = TRUE,
-                    options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                  ),
-                  shinyWidgets::pickerInput(
-                    inputId = "summarise_cohort_count_plot_colour",
-                    label = "Colour",
-                    choices = c("cdm_name", "cohort_name", "table_name", "weighting"),
-                    selected = "cohort_name",
-                    multiple = TRUE,
-                    options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-                  ),
-                  position = "right"
-                ),
-                shiny::uiOutput("summarise_cohort_count_plot") |>
-                  shinycssloaders::withSpinner()
-              )
-            )
           )
         )
       )
@@ -475,33 +411,9 @@ ui <- bslib::page_navbar(
           options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
         ),
         shinyWidgets::pickerInput(
-          inputId = "incidence_maternal_age_group_narrow",
-          label = "Maternal age (narrow)",
-          choices = choices$incidence_maternal_age_group_narrow,
-          selected = "overall",
-          multiple = TRUE,
-          options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-        ),
-        shinyWidgets::pickerInput(
           inputId = "incidence_pregnancy_start_period",
           label = "Pregnancy start period",
           choices = choices$incidence_pregnancy_start_period,
-          selected = "overall",
-          multiple = TRUE,
-          options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-        ),
-        shinyWidgets::pickerInput(
-          inputId = "incidence_pregnancy_outcome_strata",
-          label = "Pregnancy outcome",
-          choices = choices$incidence_pregnancy_outcome_strata,
-          selected = "overall",
-          multiple = TRUE,
-          options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-        ),
-        shinyWidgets::pickerInput(
-          inputId = "incidence_previous_pregnancy",
-          label = "Previous pregnancy",
-          choices = choices$incidence_previous_pregnancy,
           selected = "overall",
           multiple = TRUE,
           options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -568,7 +480,7 @@ ui <- bslib::page_navbar(
                 shinyWidgets::pickerInput(
                   inputId = "incidence_tidy_columns",
                   label = "Columns",
-                  choices = c('cdm_name', 'outcome_cohort_name', 'gestational_trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable_name', 'variable_level', 'outcome_count', 'person_days_count', 'denominator_count', 'person_years', 'incidence_100000_pys', 'incidence_100000_pys_95CI_lower', 'incidence_100000_pys_95CI_upper', 'outcome_in_period_count', 'outcome_in_period_percentage'),
+                  choices = c('cdm_name', 'outcome_cohort_name', 'gestational_trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable_name', 'variable_level', 'outcome_count', 'person_days_count', 'denominator_count', 'person_years', 'incidence_100000_pys', 'incidence_100000_pys_95CI_lower', 'incidence_100000_pys_95CI_upper', 'outcome_in_period_count', 'outcome_in_period_percentage'),
                   selected = c('cdm_name', 'outcome_cohort_name', 'outcome_count', 'person_days_count', 'denominator_count', 'person_years', 'incidence_100000_pys', 'incidence_100000_pys_95CI_lower', 'incidence_100000_pys_95CI_upper', 'outcome_in_period_count', 'outcome_in_period_percentage'),
                   multiple = TRUE,
                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -625,7 +537,7 @@ ui <- bslib::page_navbar(
                   ),
                   sortable::add_rank_list(
                     text = "Hide",
-                    labels = c('gestational_trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable_name', 'variable_level'),
+                    labels = c('gestational_trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable_name', 'variable_level'),
                     input_id = "incidence_table_hide"
                   )
                 ),
@@ -683,7 +595,7 @@ ui <- bslib::page_navbar(
                 shinyWidgets::pickerInput(
                   inputId = "incidence_plot_x",
                   label = "X axis",
-                  choices = c("cdm_name", "outcome_cohort_name", "gestational_trimester", 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
+                  choices = c("cdm_name", "outcome_cohort_name", "gestational_trimester", 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
                   selected = "outcome_cohort_name",
                   multiple = FALSE,
                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -691,7 +603,7 @@ ui <- bslib::page_navbar(
                 shinyWidgets::pickerInput(
                   inputId = "incidence_plot_facet",
                   label = "Facet",
-                  choices = c("cdm_name", "outcome_group", "outcome_cohort_name", "gestational_trimester", 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
+                  choices = c("cdm_name", "outcome_group", "outcome_cohort_name", "gestational_trimester", 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
                   selected = "cdm_name",
                   multiple = TRUE,
                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -699,7 +611,7 @@ ui <- bslib::page_navbar(
                 shinyWidgets::pickerInput(
                   inputId = "incidence_plot_colour",
                   label = "Colour",
-                  choices = c("cdm_name", "outcome_group", "outcome_cohort_name", "gestational_trimester", 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
+                  choices = c("cdm_name", "outcome_group", "outcome_cohort_name", "gestational_trimester", 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
                   selected = "outcome_group",
                   multiple = TRUE,
                   options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -723,322 +635,6 @@ ui <- bslib::page_navbar(
         )
       )
     )
-    # ## Cumulative Incidence -----
-    # bslib::nav_panel(
-    #   title = "Cumulative Incidence",
-    #   icon = shiny::icon("chart-gantt"),
-    #   bslib::layout_sidebar(
-    #     sidebar = bslib::sidebar(
-    #       width = 400,
-    #       open = "closed",
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_cdm_name",
-    #         label = "CDM name",
-    #         choices = choices$survival_cdm_name,
-    #         selected = selected$survival_cdm_name[1],
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_group_level",
-    #         label = "Target cohort",
-    #         choices = choices$survival_target_cohort,
-    #         selected = selected$survival_target_cohort[1],
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_outcome_group",
-    #         label = "Outcome group name",
-    #         choices = choices$survival_outcome_group,
-    #         selected = selected$survival_outcome_group[1],
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_outcome",
-    #         label = "Outcome cohort name",
-    #         choices = character(),
-    #         multiple = TRUE,
-    #         options = list(
-    #           `actions-box` = TRUE,
-    #           size = 10,
-    #           `selected-text-format` = "count > 3"
-    #         )
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_maternal_age_group",
-    #         label = "Maternal age",
-    #         choices = choices$survival_maternal_age_group,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_maternal_age_group_narrow",
-    #         label = "Maternal age (narrow)",
-    #         choices = choices$survival_maternal_age_group_narrow,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_pregnancy_start_period",
-    #         label = "Pregnancy start period",
-    #         choices = choices$survival_pregnancy_start_period,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_previous_pregnancy",
-    #         label = "Previous pregnancy",
-    #         choices = choices$survival_previous_pregnancy,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_pregnancy_outcome_strata",
-    #         label = "Pregnancy outcome",
-    #         choices = choices$survival_pregnancy_outcome_strata,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_socioeconomic_status",
-    #         label = "Socioecnomic status",
-    #         choices = choices$survival_socioeconomic_status,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_ethnicity",
-    #         label = "Ethhnicity",
-    #         choices = choices$survival_ethnicity,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_nationallity",
-    #         label = "Nationallity",
-    #         choices = choices$survival_nationallity,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       shinyWidgets::pickerInput(
-    #         inputId = "survival_birth_continent",
-    #         label = "Birth continent",
-    #         choices = choices$survival_birth_continent,
-    #         selected = "overall",
-    #         multiple = TRUE,
-    #         options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #       ),
-    #       position = "left"
-    #     ),
-    #     bslib::navset_card_tab(
-    #       bslib::nav_panel(
-    #         title = "Table Estimates",
-    #         bslib::card(
-    #           full_screen = TRUE,
-    #           bslib::card_header(
-    #             bslib::popover(
-    #               shiny::icon("download"),
-    #               shiny::downloadButton(outputId = "survival_tidy_download", label = "Download csv")
-    #             ),
-    #             class = "text-end"
-    #           ),
-    #           # bslib::layout_sidebar(
-    #           shinyWidgets::pickerInput(
-    #             inputId = "survival_tidy_hide",
-    #             label = "Hide",
-    #             choices = c('cdm_name', 'target_cohort', 'outcome', 'competing_outcome', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable', 'time', 'result_type', 'outcome_group', 'outcome_washout', 'estimate', 'estimate_95CI_lower', 'estimate_95CI_upper'),
-    #             selected = c('competing_outcome', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable', 'result_type', 'outcome_group', 'outcome_washout'),
-    #             multiple = TRUE,
-    #             options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #           ),
-    #           DT::DTOutput("survival_tidy") |>
-    #             shinycssloaders::withSpinner()
-    #           # )
-    #         )
-    #       ),
-    #       bslib::nav_panel(
-    #         title = "Table Events",
-    #         bslib::card(
-    #           full_screen = TRUE,
-    #           bslib::card_header(
-    #             bslib::popover(
-    #               shiny::icon("download"),
-    #               shiny::downloadButton(outputId = "survival_events_download", label = "Download csv")
-    #             ),
-    #             class = "text-end"
-    #           ),
-    #           # bslib::layout_sidebar(
-    #           shinyWidgets::pickerInput(
-    #             inputId = "survival_events_hide",
-    #             label = "Hide",
-    #             choices = c('cdm_name', 'target_cohort', 'outcome', 'competing_outcome', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable', 'time', 'result_type', 'outcome_group', 'outcome_washout', 'estimate', 'estimate_95CI_lower', 'estimate_95CI_upper', 'eventgap', 'n_risk', 'n_events', 'n_censor'),
-    #             selected = c('competing_outcome', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', 'variable', 'result_type', 'outcome_group', 'outcome_washout', 'estimate', 'estimate_95CI_lower', 'estimate_95CI_upper', 'eventgap'),
-    #             multiple = TRUE,
-    #             options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #           ),
-    #           DT::DTOutput("survival_events") |>
-    #             shinycssloaders::withSpinner()
-    #         )
-    #         # )
-    #       ),
-    #       bslib::nav_panel(
-    #         title = "Table Overall",
-    #         bslib::card(
-    #           full_screen = TRUE,
-    #           bslib::card_header(
-    #             bslib::popover(
-    #               shiny::icon("download"),
-    #               shinyWidgets::pickerInput(
-    #                 inputId = "survival_table_format",
-    #                 label = "Format",
-    #                 choices = c("docx", "png", "pdf", "html"),
-    #                 selected = "docx",
-    #                 multiple = FALSE,
-    #                 options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #               ),
-    #               shiny::downloadButton(outputId = "survival_table_download", label = "Download table")
-    #             ),
-    #             class = "text-end"
-    #           ),
-    #           bslib::layout_sidebar(
-    #             sidebar = bslib::sidebar(
-    #               shinyWidgets::pickerInput(
-    #                 inputId = "survival_table_estimates",
-    #                 label = "Estimates",
-    #                 choices = c("Number pregnancies", "Number outcomes"),
-    #                 selected = c("Number pregnancies", "Number outcomes"),
-    #                 multiple = TRUE,
-    #                 options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #               ),
-    #               sortable::bucket_list(
-    #                 header = "Table formatting",
-    #                 sortable::add_rank_list(
-    #                   text = "none",
-    #                   labels = c("outcome_name"),
-    #                   input_id = "survival_table_none"
-    #                 ),
-    #                 sortable::add_rank_list(
-    #                   text = "header",
-    #                   labels = c("cdm_name", "estimate_name"),
-    #                   input_id = "survival_table_header"
-    #                 ),
-    #                 sortable::add_rank_list(
-    #                   text = "groupColumn",
-    #                   labels = c(),
-    #                   input_id = "survival_table_groupColumn"
-    #                 ),
-    #                 sortable::add_rank_list(
-    #                   text = "hide",
-    #                   labels = c("maternal_age_group", 'maternal_age_group_narrow', 'pregnancy_outcome_strata', "pregnancy_start_period", "socioeconomic_status", "ethnicity", 'birth_continent', 'nationallity', "target_cohort", "time"),
-    #                   input_id = "survival_table_hide"
-    #                 )
-    #               ),
-    #               position = "right"
-    #             ),
-    #             gt::gt_output("survival_table") |>
-    #               shinycssloaders::withSpinner()
-    #           )
-    #         )
-    #       ),
-    #       bslib::nav_panel(
-    #         title = "Plot",
-    #         bslib::card(
-    #           full_screen = TRUE,
-    #           bslib::card_header(
-    #             bslib::popover(
-    #               shiny::icon("download"),
-    #               shiny::numericInput(
-    #                 inputId = "summarise_cohort_survival_plot_download_width",
-    #                 label = "Width",
-    #                 value = 15
-    #               ),
-    #               shiny::numericInput(
-    #                 inputId = "summarise_cohort_survival_plot_download_height",
-    #                 label = "Height",
-    #                 value = 10
-    #               ),
-    #               shinyWidgets::pickerInput(
-    #                 inputId = "summarise_cohort_survival_plot_download_units",
-    #                 label = "Units",
-    #                 selected = "cm",
-    #                 choices = c("px", "cm", "inch"),
-    #                 multiple = FALSE
-    #               ),
-    #               shiny::numericInput(
-    #                 inputId = "summarise_cohort_survival_plot_download_dpi",
-    #                 label = "dpi",
-    #                 value = 300
-    #               ),
-    #               shiny::downloadButton(
-    #                 outputId = "summarise_cohort_survival_plot_download",
-    #                 label = "Download"
-    #               )
-    #             ),
-    #             class = "text-end"
-    #           ),
-    #           bslib::layout_sidebar(
-    #             sidebar = bslib::sidebar(
-    #               width = 400, open = "closed",
-    #               materialSwitch(
-    #                 inputId = "survival_plot_interactive",
-    #                 value = TRUE,
-    #                 label = "Interactive",
-    #                 status = "primary"
-    #               ),
-    #               shiny::checkboxInput(
-    #                 inputId = "survival_plot_ribbon",
-    #                 label = "Ribbon",
-    #                 value = c(TRUE)
-    #               ),
-    #               shiny::checkboxInput(
-    #                 inputId = "survival_plot_cf",
-    #                 label = "Plot cumulative failure",
-    #                 value = TRUE
-    #               ),
-    #               shinyWidgets::pickerInput(
-    #                 inputId = "survival_plot_colour",
-    #                 label = "Colour",
-    #                 selected = c("outcome"),
-    #                 multiple = TRUE,
-    #                 choices = c("cdm_name", "outcome", "maternal_age_group", 'maternal_age_group_narrow', 'pregnancy_outcome_strata', "pregnancy_start_period", "socioeconomic_status", "ethnicity", 'birth_continent', 'nationallity'),
-    #                 options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #               ),
-    #               shinyWidgets::pickerInput(
-    #                 inputId = "survival_plot_facet",
-    #                 label = "Facet",
-    #                 selected = c("cdm_name"),
-    #                 multiple = TRUE,
-    #                 choices = c("cdm_name", "outcome", "maternal_age_group", 'maternal_age_group_narrow', 'pregnancy_outcome_strata', "pregnancy_start_period", "socioeconomic_status", "ethnicity", 'birth_continent', 'nationallity'),
-    #                 options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #               ),
-    #               shinyWidgets::pickerInput(
-    #                 inputId = "survival_time_scale",
-    #                 label = "Time scale",
-    #                 choices = c("days", "months", "years"),
-    #                 selected = "days",
-    #                 multiple = FALSE,
-    #                 options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-    #               ),
-    #               position = "right"
-    #             ),
-    #             uiOutput("summarise_cohort_survival_plot") |>
-    #               withSpinner()
-    #           )
-    #         )
-    #       )
-    #     )
-    #   )
-    # )
   ),
   # Characterisation ----
   bslib::nav_menu(
@@ -1083,33 +679,9 @@ ui <- bslib::page_navbar(
             options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
           ),
           shinyWidgets::pickerInput(
-            inputId = "summarise_characteristics_maternal_age_group_narrow",
-            label = "Maternal age (narrow)",
-            choices = choices$summarise_characteristics_maternal_age_group_narrow,
-            selected = "overall",
-            multiple = TRUE,
-            options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-          ),
-          shinyWidgets::pickerInput(
             inputId = "summarise_characteristics_trimester",
             label = "Trimester",
             choices = choices$summarise_characteristics_trimester,
-            selected = "overall",
-            multiple = TRUE,
-            options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-          ),
-          shinyWidgets::pickerInput(
-            inputId = "summarise_characteristics_pregnancy_outcome_strata",
-            label = "Pregnancy outcome",
-            choices = choices$summarise_characteristics_pregnancy_outcome_strata,
-            selected = "overall",
-            multiple = TRUE,
-            options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-          ),
-          shinyWidgets::pickerInput(
-            inputId = "summarise_characteristics_previous_pregnancy",
-            label = "Previous pregnancy",
-            choices = choices$summarise_characteristics_previous_pregnancy,
             selected = "overall",
             multiple = TRUE,
             options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -1215,7 +787,7 @@ ui <- bslib::page_navbar(
                     ),
                     sortable::add_rank_list(
                       text = "Hide",
-                      labels = c("table_name", 'trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
+                      labels = c("table_name", 'trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
                       input_id = "summarise_characteristics_table_hide"
                     )
                   ),
@@ -1332,33 +904,9 @@ ui <- bslib::page_navbar(
             options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
           ),
           shinyWidgets::pickerInput(
-            inputId = "summarise_large_scale_characteristics_maternal_age_group_narrow",
-            label = "Maternal age (narrow)",
-            choices = choices$summarise_large_scale_characteristics_maternal_age_group_narrow,
-            selected = "overall",
-            multiple = TRUE,
-            options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-          ),
-          shinyWidgets::pickerInput(
             inputId = "summarise_large_scale_characteristics_trimester",
             label = "Trimester",
             choices = choices$summarise_large_scale_characteristics_trimester,
-            selected = "overall",
-            multiple = TRUE,
-            options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-          ),
-          shinyWidgets::pickerInput(
-            inputId = "summarise_large_scale_characteristics_pregnancy_outcome_strata",
-            label = "Pregnancy outcome",
-            choices = choices$summarise_large_scale_characteristics_pregnancy_outcome_strata,
-            selected = "overall",
-            multiple = TRUE,
-            options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
-          ),
-          shinyWidgets::pickerInput(
-            inputId = "summarise_large_scale_characteristics_previous_pregnancy",
-            label = "Previous pregnancy",
-            choices = choices$summarise_large_scale_characteristics_previous_pregnancy,
             selected = "overall",
             multiple = TRUE,
             options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -1448,8 +996,8 @@ ui <- bslib::page_navbar(
                   shinyWidgets::pickerInput(
                     inputId = "summarise_large_scale_characteristics_table_lsc_hide",
                     label = "Hide",
-                    choices = c("cdm_name", "type", "variable_name", "variable_level", 'trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
-                    selected = c('trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'ethnicity', 'birth_continent', 'nationallity', "type"),
+                    choices = c("cdm_name", "type", "variable_name", "variable_level", 'trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
+                    selected = c('trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'ethnicity', 'birth_continent', 'nationallity', "type"),
                     multiple = TRUE,
                     options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
                   ),
@@ -1492,8 +1040,8 @@ ui <- bslib::page_navbar(
           #         shinyWidgets::pickerInput(
           #           inputId = "summarise_large_scale_characteristics_table_lsc_compared_hide",
           #           label = "Hide",
-          #           choices = c("cdm_name", "type", "variable_name", "variable_level", "smd", "asmd", 'trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
-          #           selected = c('trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', "type"),
+          #           choices = c("cdm_name", "type", "variable_name", "variable_level", "smd", "asmd", 'trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity'),
+          #           selected = c('trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', "type"),
           #           multiple = TRUE,
           #           options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
           #         ),
@@ -1569,7 +1117,7 @@ ui <- bslib::page_navbar(
           #         shinyWidgets::pickerInput(
           #           inputId = "summarise_large_scale_characteristics_plot_compared_colour",
           #           label = "Colour",
-          #           choices = c("cdm_name", "cohort_name", 'trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', "type", "concept_id", "concept_name"),
+          #           choices = c("cdm_name", "cohort_name", 'trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', "type", "concept_id", "concept_name"),
           #           selected = "concept_name",
           #           multiple = FALSE,
           #           options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
@@ -1577,7 +1125,7 @@ ui <- bslib::page_navbar(
           #         shinyWidgets::pickerInput(
           #           inputId = "summarise_large_scale_characteristics_plot_compared_facet",
           #           label = "Facet",
-          #           choices = c("cdm_name", 'trimester', 'maternal_age_group', 'maternal_age_group_narrow', 'pregnancy_outcome_strata', 'previous_pregnancy', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', "type", "concept_id", "concept_name"),
+          #           choices = c("cdm_name", 'trimester', 'maternal_age_group', 'pregnancy_start_period', 'socioeconomic_status', 'ethnicity', 'birth_continent', 'nationallity', "type", "concept_id", "concept_name"),
           #           selected = c("cdm_name"),
           #           multiple = TRUE,
           #           options = list(`actions-box` = TRUE, size = 10, `selected-text-format` = "count > 3")
